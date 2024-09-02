@@ -1,2 +1,3 @@
-# fritzing-actions
-Github Actions Fritzing builds
+# Github Actions Fritzing builds
+
+Based on <https://github.com/Gigahawk/fritzing-build>.

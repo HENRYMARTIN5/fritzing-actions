@@ -1,0 +1,79 @@
+name: Fritzing Build
+
+on:
+  push:
+
+  workflow_dispatch:
+
+jobs:
+  build_win:
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        fritzing_ver: 
+          - 1.0.3
+    env:
+      BOOST_VER_DOT: 1.86.0
+      BOOST_VER_UND: 1_86_0
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Determine fritzing-app release commit
+        shell: bash
+        run: |
+          echo "Building ${{ matrix.fritzing_ver }}"
+          export _FRITZING_HASH=$(./get_ver_hash.sh ${{ matrix.fritzing_ver }})
+          echo "Commit hash is $_FRITZING_HASH"
+          echo "FRITZING_HASH=$_FRITZING_HASH" >> $GITHUB_ENV
+
+      - name: Clone fritzing-app at specified commit
+        shell: bash
+        run: |
+          mkdir fritzing-app
+          cd fritzing-app
+          git init
+          git remote add origin https://github.com/fritzing/fritzing-app.git
+          git fetch --depth 1 origin $FRITZING_HASH
+          git checkout FETCH_HEAD
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.15.14
+          target: desktop
+          arch: win64_msvc2019_64
+
+      - name: Download boost
+        shell: bash
+        run: curl -L -O https://boostorg.jfrog.io/artifactory/main/release/${{ env.BOOST_VER_DOT }}/source/boost_${{ env.BOOST_VER_UND }}.zip
+
+      - name: Extract boost
+        run: 7z x boost_${{ env.BOOST_VER_UND }}.zip
+
+      - name: Build libgit2
+        run: |
+          cd libgit2
+          mkdir build64
+          cd build64
+          cmake ..
+          cmake --build . --config Release
+
+      - name: Replace Fritzing build script
+        shell: bash
+        run: cp release_fritzing.bat fritzing-app/tools/release_fritzing.bat
+
+      - name: Build Fritzing
+        shell: cmd
+        run: |
+          cd fritzing-app
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat" -host_arch=amd64 -arch=amd64
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat" -test
+          tools\release_fritzing.bat ${{ matrix.fritzing_ver }} 64 2019
+
+      - name: Upload build
+        uses: actions/upload-artifact@v2
+        with:
+          name: fritzing_${{ matrix.fritzing_ver }}
+          path: release64/fritzing-${{ matrix.fritzing_ver }}.windows.64.zip
