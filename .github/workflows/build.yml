@@ -39,9 +39,9 @@ jobs:
           git checkout FETCH_HEAD
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
-          version: 5.15.2
+          version: 6.5.3
           target: desktop
           arch: win64_msvc2019_64
 
