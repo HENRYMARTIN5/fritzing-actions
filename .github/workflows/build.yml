@@ -65,6 +65,18 @@ jobs:
           cmake ..
           cmake --build . --config Release
 
+      - name: Download ngspice
+        run: |
+          curl -L -O https://sourceforge.net/projects/ngspice/files/ng-spice-rework/42/ngspice-42.tar.gz
+          tar -xzf ngspice-42.tar.gz
+
+      - name: Build ngspice
+        run: |
+          cd ngspice-42
+          ./configure --with-x --enable-xspice --disable-debug
+          make
+          make install
+
       - name: Replace Fritzing build script
         shell: bash
         run: cp release_fritzing.bat fritzing-app/tools/release_fritzing.bat
