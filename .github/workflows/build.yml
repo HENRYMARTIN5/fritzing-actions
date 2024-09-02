@@ -39,7 +39,7 @@ jobs:
           git checkout FETCH_HEAD
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v4
         with:
           version: 5.15.14
           target: desktop
