@@ -50,7 +50,7 @@ IF %2==64 (
 	EXIT /B 1
 )
 
-set QTBIN=%QT_ROOT_DIR%\bin 
+set QTBIN=%QT_ROOT_DIR%\bin
 set QMAKE=%QTBIN%\qmake.exe
 
 if not exist %QMAKE% echo '%QMAKE%' not found--please change the path to Qt\bin
