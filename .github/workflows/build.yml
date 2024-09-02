@@ -52,6 +52,11 @@ jobs:
       - name: Extract boost
         run: 7z x boost_${{ env.BOOST_VER_UND }}.zip
 
+      - name: Verify Boost extraction
+        run: |
+          dir ${{ github.workspace }}
+          dir ${{ github.workspace }}\boost_${{ env.BOOST_VER_UND }}
+
       - name: Build libgit2
         run: |
           cd libgit2
