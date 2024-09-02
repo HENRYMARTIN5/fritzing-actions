@@ -52,6 +52,23 @@ IF %2==64 (
 
 set QMAKE=%QTBIN%\qmake.exe
 
+echo Debugging information:
+echo Current directory:
+cd
+echo.
+
+echo Environment variables:
+set
+echo.
+
+echo Directory structure:
+tree /F /A
+echo.
+
+echo Qt directory contents:
+dir /s "%QTBIN%"
+echo.
+
 if not exist %QMAKE% echo '%QMAKE%' not found--please change the path to Qt\bin
 if not exist %QMAKE% EXIT /B 1
 
