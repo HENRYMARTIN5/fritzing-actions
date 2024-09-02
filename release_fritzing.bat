@@ -62,7 +62,7 @@ echo.
 cd /d %~dp0
 cd ..
 
-set LIBGIT2=%~dp0..\..\libgit2\build%2
+set LIBGIT2=D:\a\fritzing-actions\fritzing-actions\libgit2\build64
 
 rem set environment variable for qmake phoenix.pro
 set RELEASE_SCRIPT="release_script"
