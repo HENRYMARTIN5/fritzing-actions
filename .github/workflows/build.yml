@@ -13,8 +13,8 @@ jobs:
         fritzing_ver: 
           - 1.0.3
     env:
-      BOOST_VER_DOT: 1.53.0
-      BOOST_VER_UND: 1_53_0
+      BOOST_VER_DOT: 1.70.0
+      BOOST_VER_UND: 1_70.0
     steps:
       - uses: actions/checkout@v2
         with:
